@@ -3,8 +3,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
-<title>Nexor Tech — Tecnologia premium</title>
-<meta name="description" content="Nexor Tech: curadoria de tecnologia com preço justo, frete grátis e compra segura.">
+<title>Nexor Tech — Presentes e ofertas</title>
+<meta name="description" content="Nexor Tech: presentes, eletrônicos, casa, beleza e decoração de Natal com preço justo, frete grátis e compra segura.">
 <meta name="theme-color" content="#05070f">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%235b8cff'/%3E%3Cstop%20offset='1'%20stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%23080b18'/%3E%3Cpath%20d='M14%2026l6-10%207%207%206-11%206%2011%207-7%206%2010z'%20fill='url(%23g)'/%3E%3Cpath%20d='M15%2034h34l-4%2014a5%205%200%2001-5%204H24a5%205%200%2001-5-4z'%20fill='none'%20stroke='%238b5cf6'%20stroke-width='4'%20stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20180%20180'%3E%3Crect%20width='180'%20height='180'%20rx='44'%20fill='%23080b18'/%3E%3Cpath%20d='M38%2074l17-28%2020%2020%2017-31%2017%2031%2020-20%2017%2028z'%20fill='%235b8cff'/%3E%3C/svg%3E">
@@ -17,7 +17,7 @@
   --bg:#05070f;--bg2:#080b18;--card:#0b1020;--card2:#10162b;
   --line:rgba(255,255,255,.085);--line2:rgba(255,255,255,.05);
   --ink:#f4f7ff;--ink2:#c4cde5;--muted:#8c99ba;--muted2:#6c7998;
-  --a1:#5b8cff;--a2:#8b5cf6;--a3:#22d3ee;--lime:#34d399;--rose:#fb7185;
+  --a1:#5b8cff;--a2:#8b5cf6;--a3:#22d3ee;--lime:#34d399;--rose:#fb7185;--gold:#f5c451;
   --r:18px;--r2:26px;
   --grad:linear-gradient(120deg,#5b8cff,#8b5cf6 58%,#22d3ee);
   --gradbtn:linear-gradient(120deg,#5b8cff,#8b5cf6);
@@ -56,9 +56,14 @@ img{max-width:100%}
 .lnk.solid{background:var(--gradbtn);color:#fff;font-weight:700;box-shadow:0 10px 26px -12px rgba(91,140,255,.95)}
 .chips{display:flex;gap:8px;padding:0 20px 12px;max-width:1280px;margin:0 auto;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;padding:8px 15px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.035);font-size:12.5px;font-weight:600;color:var(--muted);transition:.16s}
+.chip{flex:0 0 auto;padding:8px 15px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.035);font-size:12.5px;font-weight:600;color:var(--muted);transition:.16s;display:flex;align-items:center;gap:6px}
 .chip:hover{color:#fff;border-color:rgba(91,140,255,.55);background:rgba(91,140,255,.12)}
 .chip.on{background:var(--gradbtn);color:#fff;border-color:transparent;box-shadow:0 10px 24px -12px rgba(91,140,255,.95)}
+.chip.natal{border-color:rgba(245,196,81,.4);background:rgba(245,196,81,.1);color:#f7d98a}
+.chip.natal:hover{background:rgba(245,196,81,.2);color:#fff}
+.chip.natal.on{background:linear-gradient(120deg,#f5c451,#e08b2b);color:#2a1a02;border-color:transparent;box-shadow:0 10px 24px -12px rgba(245,196,81,.95)}
+.chip.hot{border-color:rgba(251,113,133,.4);background:rgba(251,113,133,.1);color:#fda4b0}
+.chip.hot.on{background:linear-gradient(120deg,#fb7185,#e11d48);color:#fff;border-color:transparent}
 .shell{max-width:1280px;margin:0 auto;padding:22px 20px 70px;position:relative;z-index:1}
 .bc{font-size:12px;color:var(--muted2);margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .shead{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:34px 0 16px}
@@ -76,7 +81,7 @@ img{max-width:100%}
 .trust span{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink2);background:rgba(255,255,255,.05);border:1px solid var(--line);padding:7px 11px;border-radius:999px}
 .trust svg{color:var(--lime)}
 .hcards{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.hcard{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,#f4f7ff,#e3e9f9);aspect-ratio:1/1;display:grid;place-items:center;padding:14px;cursor:pointer;transition:.25s;box-shadow:0 20px 40px -24px rgba(0,0,0,.9)}
+.hcard{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,#f4f7ff,#e3e9f9);aspect-ratio:1/1;display:grid;place-items:center;padding:14px;cursor:pointer;transition:.25s;box-shadow:0 20px 40px -24px rgba(0,0,0,.9);font-size:52px}
 .hcard:hover{transform:translateY(-6px) rotate(-1.2deg);box-shadow:0 26px 50px -22px rgba(91,140,255,.75)}
 .hcard img{max-height:100%;object-fit:contain;mix-blend-mode:multiply}
 .hcard:nth-child(2){transform:translateY(-22px)}
@@ -116,6 +121,7 @@ img{max-width:100%}
 .tags{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:5px;z-index:2}
 .tag{font-size:9.5px;font-weight:900;letter-spacing:.6px;text-transform:uppercase;color:#04101f;background:linear-gradient(120deg,#7ee7c7,#34d399);padding:3px 8px;border-radius:999px}
 .tag.hot{background:linear-gradient(120deg,#fca5a5,#fb7185);color:#2a0a11}
+.tag.gift{background:linear-gradient(120deg,#f7d98a,#f5c451);color:#2a1a02}
 .pbody{padding:14px 15px 16px;display:flex;flex-direction:column;gap:5px;flex:1}
 .pbrand{font-size:10.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted2)}
 .pname{font-size:13.5px;color:var(--ink);font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:37px}
@@ -290,7 +296,7 @@ img{max-width:100%}
     </a>
     <form class="searchpill" onsubmit="event.preventDefault();buscar()">
       <svg viewBox="0 0 24 24" width="17" height="17"><path fill="#8c99ba" d="M10 2a8 8 0 105.29 14.29l4.3 4.3 1.42-1.42-4.3-4.3A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/></svg>
-      <input id="q" placeholder="Buscar produtos, marcas e categorias" autocomplete="off" aria-label="Buscar" oninput="onSearch(this.value)" onfocus="onSearch(this.value)">
+      <input id="q" placeholder="Buscar presentes, eletrônicos, casa..." autocomplete="off" aria-label="Buscar" oninput="onSearch(this.value)" onfocus="onSearch(this.value)">
       <button class="go" type="submit" aria-label="Buscar"><svg viewBox="0 0 24 24" width="16" height="16"><path fill="#fff" d="M10 2a8 8 0 105.29 14.29l4.3 4.3 1.42-1.42-4.3-4.3A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/></svg></button>
       <div class="sugg" id="sugg"></div>
     </form>
@@ -315,7 +321,7 @@ img{max-width:100%}
 
 <div class="toast" id="toast"></div>
 
-<script id="seedData" type="application/json">{"products":[{"id":1,"n":"Fone de Ouvido Bluetooth JBL Tune 510BT Sem Fio","c":"Áudio","p":149.9,"o":249,"r":4.8,"rv":1243,"st":120,"s":"Loja Oficial JBL","full":true,"free":true,"i":"🎧","imgs":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSt42k9QB4M1kFSvu7gFC9FKD9-hwsevyjEpRB9n-saaw&s=10"],"d":"Fone sem fio com Bluetooth 5.0 e até 40 horas de bateria.","specs":{"Marca":"JBL","Bateria":"40h"},"ativo":true},{"id":2,"n":"Smartphone Samsung Galaxy A54 5G 128GB","c":"Celulares","p":1499.9,"o":2199,"r":4.7,"rv":8932,"st":64,"s":"Samsung Store","full":true,"free":true,"i":"📱","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_816054-MLA99479821342_112025-F.webp"],"d":"Tela AMOLED 6,4\", câmera tripla 50MP e bateria 5000mAh.","specs":{"Marca":"Samsung","Memória":"128GB"},"ativo":true},{"id":3,"n":"Notebook Lenovo IdeaPad 3 Ryzen 5 8GB 256GB","c":"Informática","p":2499.9,"o":3499,"r":4.6,"rv":3410,"st":22,"s":"Lenovo Oficial","full":true,"free":true,"i":"💻","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_734532-MLA99460529112_112025-F.webp"],"d":"Ryzen 5, 8GB e SSD 256GB. Tela Full HD 15,6\".","specs":{"Marca":"Lenovo","Armazenamento":"256GB"},"ativo":true},{"id":4,"n":"Air Fryer Mondial Family 4L 1500W","c":"Cozinha","p":249.9,"o":349.9,"r":4.7,"rv":15420,"st":210,"s":"Mondial","full":false,"free":true,"i":"🍳","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_995361-MLB110884090312_052026-F-air-fryer-mondial-family-4l-1500w-fritadeira-sem-oleo.webp"],"d":"Fritadeira sem óleo 4 litros, timer 60 min.","specs":{"Capacidade":"4 litros"},"ativo":true},{"id":5,"n":"Tênis Adidas Runfalcon 3.0 Masculino","c":"Calçados","p":219.9,"o":444.9,"r":4.5,"rv":2871,"st":98,"s":"Adidas Oficial","full":true,"free":true,"i":"👟","imgs":["https://static.shoestock.com.br/produtos/tenis-adidas-runfalcon-30-masculino/26/FB8-4501-026/FB8-4501-026_zoom1.jpg?ts=1786607797&ims=1088x"],"d":"Tênis de corrida com mesh respirável.","specs":{"Marca":"Adidas"},"ativo":true},{"id":6,"n":"Smartwatch Amazfit Bip 3 Pro GPS","c":"Wearables","p":219,"o":540,"r":4.4,"rv":1902,"st":45,"s":"Amazfit Store","full":true,"free":true,"i":"⌚","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_964617-MLA99411392074_112025-F.webp"],"d":"GPS integrado e monitor cardíaco 24h.","specs":{"Marca":"Amazfit"},"ativo":true},{"id":7,"n":"Console Xbox Series S 512GB Digital","c":"Games","p":2199,"o":2699,"r":4.9,"rv":6321,"st":18,"s":"Xbox Brasil","full":true,"free":true,"i":"🎮","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_914498-MLA109880315129_032026-F.webp"],"d":"Console digital com SSD 512GB.","specs":{"Marca":"Microsoft"},"ativo":true},{"id":8,"n":"Câmera DSLR Canon EOS Rebel T7","c":"Câmeras","p":2299.9,"o":3499,"r":4.8,"rv":874,"st":12,"s":"Canon Store","full":true,"free":true,"i":"📷","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_948309-MLA99497332854_112025-F.webp"],"d":"Sensor 24,1MP e vídeo Full HD.","specs":{"Marca":"Canon"},"ativo":true},{"id":9,"n":"Monitor Gamer LG 24\" IPS 75Hz","c":"Monitores","p":349,"o":899,"r":4.6,"rv":2210,"st":37,"s":"LG Oficial","full":true,"free":true,"i":"🖥️","imgs":["https://www.lg.com/content/dam/channel/wcms/br/images/monitores/24ml600m-b_awzm_essp_br_c/gallery/1600-x-1062-01-v2.jpg?w=800"],"d":"IPS 24\" Full HD 75Hz FreeSync.","specs":{"Tamanho":"24\""},"ativo":true},{"id":10,"n":"Cafeteira Nespresso Essenza Mini","c":"Cozinha","p":299.9,"o":599,"r":4.9,"rv":4102,"st":54,"s":"Nespresso","full":true,"free":true,"i":"☕","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_762385-MLA99889045659_112025-F.webp"],"d":"19 bar com aquecimento em 25 segundos.","specs":{"Pressão":"19 bar"},"ativo":true},{"id":11,"n":"Teclado Mecânico Redragon Kumara RGB","c":"Informática","p":149.9,"o":259.9,"r":4.7,"rv":5610,"st":88,"s":"Redragon","full":false,"free":true,"i":"⌨️","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_933389-MLB118912350333_102026-F-teclado-gamer-redragon-kumara-mecanico-rgb.webp"],"d":"Switch Outemu Red e RGB.","specs":{"Switch":"Outemu Red"},"ativo":true},{"id":12,"n":"Mouse Gamer Logitech G203 8000 DPI","c":"Games","p":119.9,"o":243,"r":4.8,"rv":7433,"st":140,"s":"Logitech Oficial","full":true,"free":true,"i":"🖱️","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_694654-MLA100047339869_122025-F.webp"],"d":"Sensor 8000 DPI e RGB.","specs":{"DPI":"8000"},"ativo":true},{"id":13,"n":"Caixa de Som JBL Flip 6 IP67","c":"Áudio","p":399,"o":799,"r":4.9,"rv":3120,"st":41,"s":"Loja Oficial JBL","full":true,"free":true,"i":"🔊","imgs":["https://www.jbl.com.br/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw4e91d6eb/1_JBL_FLIP6_HERO_BLACK_29391_x2.png?sw=535&sh=535"],"d":"À prova d'água IP67, 12h de bateria.","specs":{"Proteção":"IP67"},"ativo":true},{"id":14,"n":"Cadeira Presidente Ergonômica","c":"Escritório","p":339,"o":749,"r":4.4,"rv":1128,"st":26,"s":"FlexForm","full":false,"free":true,"i":"🪑","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_892750-MLA110183247129_042026-F.webp"],"d":"Encosto em tela e braços reguláveis.","specs":{"Revestimento":"Tela"},"ativo":true},{"id":15,"n":"Kit Perfume Masculino 100ml","c":"Beleza","p":134.9,"o":349.9,"r":4.6,"rv":982,"st":75,"s":"Beauty Store","full":true,"free":true,"i":"🧴","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_612850-CBT110591639834_052026-F.webp"],"d":"Fragrância amadeirada de longa fixação.","specs":{"Volume":"100ml"},"ativo":true},{"id":16,"n":"Lâmpada Inteligente Wi-Fi RGB","c":"Casa","p":49.9,"o":79.9,"r":4.5,"rv":6120,"st":320,"s":"Casa Smart","full":false,"free":true,"i":"💡","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_949339-MLB110514474805_042026-F-lampada-inteligente-10w-rgb-elgin-wifi-alexa-16m-cores.webp"],"d":"Controle por app e voz.","specs":{"Potência":"10W"},"ativo":true},{"id":17,"n":"Power Bank 20.000mAh 22.5W","c":"Celulares","p":129.9,"o":357,"r":4.5,"rv":3302,"st":109,"s":"Tech Power","full":true,"free":true,"i":"🔋","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_893362-CBT117934361544_102026-F.webp"],"d":"Duas portas USB com carga simultânea.","specs":{"Capacidade":"20.000mAh"},"ativo":true},{"id":18,"n":"Smart TV 50\" 4K Android","c":"Monitores","p":1499.9,"o":2512,"r":4.7,"rv":2890,"st":15,"s":"Vision Store","full":true,"free":true,"i":"📺","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_744440-MLA99458039046_112025-F.webp"],"d":"4K HDR10 com Android TV.","specs":{"Tamanho":"50\""},"ativo":true}]}</script>
+<script id="seedData" type="application/json">{"products":[{"id":1,"n":"Fone de Ouvido Bluetooth JBL Tune 510BT Sem Fio","c":"Áudio","p":149.9,"o":249,"r":4.8,"rv":1243,"st":120,"s":"Loja Oficial JBL","full":true,"free":true,"i":"🎧","imgs":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSt42k9QB4M1kFSvu7gFC9FKD9-hwsevyjEpRB9n-saaw&s=10"],"d":"Fone sem fio com Bluetooth 5.0 e até 40 horas de bateria.","specs":{"Marca":"JBL","Bateria":"40h"},"ativo":true},{"id":2,"n":"Smartphone Samsung Galaxy A54 5G 128GB","c":"Celulares","p":1499.9,"o":2199,"r":4.7,"rv":8932,"st":64,"s":"Samsung Store","full":true,"free":true,"i":"📱","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_816054-MLA99479821342_112025-F.webp"],"d":"Tela AMOLED 6,4\", câmera tripla 50MP e bateria 5000mAh.","specs":{"Marca":"Samsung","Memória":"128GB"},"ativo":true},{"id":3,"n":"Notebook Lenovo IdeaPad 3 Ryzen 5 8GB 256GB","c":"Informática","p":2499.9,"o":3499,"r":4.6,"rv":3410,"st":22,"s":"Lenovo Oficial","full":true,"free":true,"i":"💻","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_734532-MLA99460529112_112025-F.webp"],"d":"Ryzen 5, 8GB e SSD 256GB. Tela Full HD 15,6\".","specs":{"Marca":"Lenovo","Armazenamento":"256GB"},"ativo":true},{"id":4,"n":"Air Fryer Mondial Family 4L 1500W","c":"Cozinha","p":249.9,"o":349.9,"r":4.7,"rv":15420,"st":210,"s":"Mondial","full":false,"free":true,"i":"🍳","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_995361-MLB110884090312_052026-F-air-fryer-mondial-family-4l-1500w-fritadeira-sem-oleo.webp"],"d":"Fritadeira sem óleo 4 litros, timer 60 min.","specs":{"Capacidade":"4 litros"},"ativo":true},{"id":5,"n":"Tênis Adidas Runfalcon 3.0 Masculino","c":"Calçados","p":219.9,"o":444.9,"r":4.5,"rv":2871,"st":98,"s":"Adidas Oficial","full":true,"free":true,"i":"👟","imgs":["https://static.shoestock.com.br/produtos/tenis-adidas-runfalcon-30-masculino/26/FB8-4501-026/FB8-4501-026_zoom1.jpg?ts=1786607797&ims=1088x"],"d":"Tênis de corrida com mesh respirável.","specs":{"Marca":"Adidas"},"ativo":true},{"id":6,"n":"Smartwatch Amazfit Bip 3 Pro GPS","c":"Wearables","p":219,"o":540,"r":4.4,"rv":1902,"st":45,"s":"Amazfit Store","full":true,"free":true,"i":"⌚","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_964617-MLA99411392074_112025-F.webp"],"d":"GPS integrado e monitor cardíaco 24h.","specs":{"Marca":"Amazfit"},"ativo":true},{"id":7,"n":"Console Xbox Series S 512GB Digital","c":"Games","p":2199,"o":2699,"r":4.9,"rv":6321,"st":18,"s":"Xbox Brasil","full":true,"free":true,"i":"🎮","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_914498-MLA109880315129_032026-F.webp"],"d":"Console digital com SSD 512GB.","specs":{"Marca":"Microsoft"},"ativo":true},{"id":8,"n":"Câmera DSLR Canon EOS Rebel T7","c":"Câmeras","p":2299.9,"o":3499,"r":4.8,"rv":874,"st":12,"s":"Canon Store","full":true,"free":true,"i":"📷","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_948309-MLA99497332854_112025-F.webp"],"d":"Sensor 24,1MP e vídeo Full HD.","specs":{"Marca":"Canon"},"ativo":true},{"id":9,"n":"Monitor Gamer LG 24\" IPS 75Hz","c":"Monitores","p":349,"o":899,"r":4.6,"rv":2210,"st":37,"s":"LG Oficial","full":true,"free":true,"i":"🖥️","imgs":["https://www.lg.com/content/dam/channel/wcms/br/images/monitores/24ml600m-b_awzm_essp_br_c/gallery/1600-x-1062-01-v2.jpg?w=800"],"d":"IPS 24\" Full HD 75Hz FreeSync.","specs":{"Tamanho":"24\""},"ativo":true},{"id":10,"n":"Cafeteira Nespresso Essenza Mini","c":"Cozinha","p":299.9,"o":599,"r":4.9,"rv":4102,"st":54,"s":"Nespresso","full":true,"free":true,"i":"☕","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_762385-MLA99889045659_112025-F.webp"],"d":"19 bar com aquecimento em 25 segundos.","specs":{"Pressão":"19 bar"},"ativo":true},{"id":11,"n":"Teclado Mecânico Redragon Kumara RGB","c":"Informática","p":149.9,"o":259.9,"r":4.7,"rv":5610,"st":88,"s":"Redragon","full":false,"free":true,"i":"⌨️","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_933389-MLB118912350333_102026-F-teclado-gamer-redragon-kumara-mecanico-rgb.webp"],"d":"Switch Outemu Red e RGB.","specs":{"Switch":"Outemu Red"},"ativo":true},{"id":12,"n":"Mouse Gamer Logitech G203 8000 DPI","c":"Games","p":119.9,"o":243,"r":4.8,"rv":7433,"st":140,"s":"Logitech Oficial","full":true,"free":true,"i":"🖱️","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_694654-MLA100047339869_122025-F.webp"],"d":"Sensor 8000 DPI e RGB.","specs":{"DPI":"8000"},"ativo":true},{"id":13,"n":"Caixa de Som JBL Flip 6 IP67","c":"Áudio","p":399,"o":799,"r":4.9,"rv":3120,"st":41,"s":"Loja Oficial JBL","full":true,"free":true,"i":"🔊","imgs":["https://www.jbl.com.br/dw/image/v2/BFND_PRD/on/demandware.static/-/Sites-masterCatalog_Harman/default/dw4e91d6eb/1_JBL_FLIP6_HERO_BLACK_29391_x2.png?sw=535&sh=535"],"d":"À prova d'água IP67, 12h de bateria.","specs":{"Proteção":"IP67"},"ativo":true},{"id":14,"n":"Cadeira Presidente Ergonômica","c":"Escritório","p":339,"o":749,"r":4.4,"rv":1128,"st":26,"s":"FlexForm","full":false,"free":true,"i":"🪑","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_892750-MLA110183247129_042026-F.webp"],"d":"Encosto em tela e braços reguláveis.","specs":{"Revestimento":"Tela"},"ativo":true},{"id":15,"n":"Kit Perfume Masculino 100ml","c":"Beleza","p":134.9,"o":349.9,"r":4.6,"rv":982,"st":75,"s":"Beauty Store","full":true,"free":true,"i":"🧴","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_612850-CBT110591639834_052026-F.webp"],"d":"Fragrância amadeirada de longa fixação.","specs":{"Volume":"100ml"},"ativo":true},{"id":16,"n":"Lâmpada Inteligente Wi-Fi RGB","c":"Casa","p":49.9,"o":79.9,"r":4.5,"rv":6120,"st":320,"s":"Casa Smart","full":false,"free":true,"i":"💡","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_949339-MLB110514474805_042026-F-lampada-inteligente-10w-rgb-elgin-wifi-alexa-16m-cores.webp"],"d":"Controle por app e voz.","specs":{"Potência":"10W"},"ativo":true},{"id":17,"n":"Power Bank 20.000mAh 22.5W","c":"Celulares","p":129.9,"o":357,"r":4.5,"rv":3302,"st":109,"s":"Tech Power","full":true,"free":true,"i":"🔋","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_893362-CBT117934361544_102026-F.webp"],"d":"Duas portas USB com carga simultânea.","specs":{"Capacidade":"20.000mAh"},"ativo":true},{"id":18,"n":"Smart TV 50\" 4K Android","c":"Monitores","p":1499.9,"o":2512,"r":4.7,"rv":2890,"st":15,"s":"Vision Store","full":true,"free":true,"i":"📺","imgs":["https://http2.mlstatic.com/D_NQ_NP_2X_744440-MLA99458039046_112025-F.webp"],"d":"4K HDR10 com Android TV.","specs":{"Tamanho":"50\""},"ativo":true},{"id":19,"n":"Pista de Carrinhos com Looping 2 em 1","c":"Brinquedos","p":89.9,"o":159.9,"r":4.6,"rv":1320,"st":60,"s":"Mundo Kids","full":false,"free":true,"i":"🏎️","imgs":[],"d":"Pista com looping e lançador. Acompanha 2 carrinhos. Montagem fácil.","specs":{"Idade":"3+","Peças":"24"},"ativo":true},{"id":20,"n":"Pelúcia Ursinho Macio 40cm","c":"Brinquedos","p":59.9,"o":99.9,"r":4.8,"rv":4100,"st":120,"s":"Mundo Kids","full":false,"free":true,"i":"🧸","imgs":[],"d":"Pelúcia macia de 40cm, enchimento antialérgico e costura reforçada.","specs":{"Altura":"40cm","Material":"Pelúcia"},"ativo":true},{"id":21,"n":"Blocos de Montar 500 Peças","c":"Brinquedos","p":79.9,"o":139.9,"r":4.7,"rv":2210,"st":80,"s":"Educa Kids","full":false,"free":true,"i":"🧱","imgs":[],"d":"500 blocos coloridos compatíveis, com caixa organizadora. Estimula coordenação.","specs":{"Peças":"500","Idade":"4+"},"ativo":true},{"id":22,"n":"Patinete Infantil 3 Rodas com LED","c":"Brinquedos","p":149.9,"o":249.9,"r":4.5,"rv":980,"st":40,"s":"Roll Kids","full":true,"free":true,"i":"🛴","imgs":[],"d":"Patinete com 3 rodas, rodinhas de LED e altura ajustável até 30kg.","specs":{"Rodas":"3","Peso máx.":"30kg"},"ativo":true},{"id":23,"n":"Brinquedo Educativo Alfabeto em Madeira","c":"Brinquedos","p":44.9,"o":79.9,"r":4.6,"rv":1740,"st":90,"s":"Educa Kids","full":false,"free":true,"i":"🔤","imgs":[],"d":"Letras de madeira para alfabetização. Pintura atóxica e acabamento liso.","specs":{"Material":"Madeira","Idade":"3+"},"ativo":true},{"id":24,"n":"Kit Maquiagem Completo 24 Peças","c":"Beleza","p":89.9,"o":169.9,"r":4.5,"rv":3120,"st":70,"s":"Beauty Store","full":false,"free":true,"i":"💄","imgs":[],"d":"Kit com sombras, batons, blush e pincéis em nécessaire. Ideal para presente.","specs":{"Peças":"24","Tipo":"Kit"},"ativo":true},{"id":25,"n":"Kit Skincare Facial 4 Passos","c":"Beleza","p":99.9,"o":189.9,"r":4.7,"rv":2410,"st":65,"s":"Derma Home","full":true,"free":true,"i":"🧖","imgs":[],"d":"Sabonete, tônico, sérum e hidratante. Fórmulas suaves para uso diário.","specs":{"Itens":"4","Pele":"Todos os tipos"},"ativo":true},{"id":26,"n":"Necessaire Organizadora Grande","c":"Beleza","p":39.9,"o":69.9,"r":4.4,"rv":1880,"st":150,"s":"Beauty Store","full":false,"free":true,"i":"👝","imgs":[],"d":"Necessaire impermeável com divisórias e alça. Fecho reforçado.","specs":{"Material":"Impermeável","Divisórias":"3"},"ativo":true},{"id":27,"n":"Bolsa Feminina Transversal","c":"Moda","p":79.9,"o":149.9,"r":4.5,"rv":2100,"st":85,"s":"Moda Viva","full":true,"free":true,"i":"👜","imgs":[],"d":"Bolsa transversal com alça ajustável e dois compartimentos.","specs":{"Material":"Sintético","Alça":"Ajustável"},"ativo":true},{"id":28,"n":"Carteira Masculina em Couro","c":"Moda","p":49.9,"o":89.9,"r":4.6,"rv":3410,"st":120,"s":"Moda Viva","full":false,"free":true,"i":"👛","imgs":[],"d":"Carteira compacta com porta-cartões e compartimento para notas.","specs":{"Material":"Couro","Cartões":"6"},"ativo":true},{"id":29,"n":"Óculos de Sol Polarizado UV400","c":"Moda","p":59.9,"o":119.9,"r":4.4,"rv":2760,"st":110,"s":"Sun Line","full":false,"free":true,"i":"🕶️","imgs":[],"d":"Lentes polarizadas com proteção UV400 e armação leve. Acompanha case.","specs":{"Proteção":"UV400","Lente":"Polarizada"},"ativo":true},{"id":30,"n":"Relógio Masculino Aço Inox","c":"Moda","p":119.9,"o":249.9,"r":4.5,"rv":1520,"st":55,"s":"Time Store","full":true,"free":true,"i":"⌚","imgs":[],"d":"Relógio analógico com pulseira em aço inox e mostrador resistente.","specs":{"Pulseira":"Aço inox","Movimento":"Quartzo"},"ativo":true},{"id":31,"n":"Pisca-Pisca LED 10m 100 Leds","c":"Natal","p":39.9,"o":79.9,"r":4.7,"rv":5200,"st":200,"s":"Natal Luz","full":false,"free":true,"i":"✨","imgs":[],"d":"Fio de LED 10 metros com 8 efeitos e controle. Uso interno e externo.","specs":{"Comprimento":"10m","Leds":"100"},"ativo":true},{"id":32,"n":"Árvore de Natal 1,80m com 800 Pontas","c":"Natal","p":189.9,"o":349.9,"r":4.6,"rv":1120,"st":30,"s":"Natal Luz","full":true,"free":true,"i":"🎄","imgs":[],"d":"Árvore com 800 pontas, base reforçada e montagem em 3 partes.","specs":{"Altura":"1,80m","Pontas":"800"},"ativo":true},{"id":33,"n":"Guirlanda de Natal Decorativa 40cm","c":"Natal","p":49.9,"o":99.9,"r":4.5,"rv":860,"st":90,"s":"Natal Luz","full":false,"free":true,"i":"🎁","imgs":[],"d":"Guirlanda de 40cm com laço e enfeites. Pronta para pendurar.","specs":{"Diâmetro":"40cm","Uso":"Porta"},"ativo":true},{"id":34,"n":"Projetor Natalino 16 Slides","c":"Natal","p":89.9,"o":159.9,"r":4.4,"rv":1340,"st":70,"s":"Natal Luz","full":false,"free":true,"i":"🎅","imgs":[],"d":"Projetor com 16 slides natalinos e base ajustável para parede.","specs":{"Slides":"16","Ajuste":"360°"},"ativo":true},{"id":35,"n":"Garrafa Térmica Inox 1L","c":"Casa","p":69.9,"o":119.9,"r":4.7,"rv":3900,"st":130,"s":"Casa Smart","full":true,"free":true,"i":"🍶","imgs":[],"d":"Garrafa térmica em inox que mantém a temperatura por até 12 horas.","specs":{"Capacidade":"1L","Material":"Inox"},"ativo":true},{"id":36,"n":"Organizador Multiuso 4 Gavetas","c":"Casa","p":79.9,"o":139.9,"r":4.5,"rv":1410,"st":95,"s":"Casa Smart","full":false,"free":true,"i":"🗄️","imgs":[],"d":"Organizador empilhável com 4 gavetas para escritório, banheiro ou cozinha.","specs":{"Gavetas":"4","Empilhável":"Sim"},"ativo":true},{"id":37,"n":"Suporte de Celular para Carro","c":"Celulares","p":34.9,"o":69.9,"r":4.4,"rv":6100,"st":200,"s":"Tech Power","full":false,"free":true,"i":"📲","imgs":[],"d":"Suporte veicular com trava de grade e giro 360 graus.","specs":{"Fixo":"Grade","Giro":"360°"},"ativo":true},{"id":38,"n":"Kit Panelas Antiaderente 5 Peças","c":"Cozinha","p":219.9,"o":399,"r":4.5,"rv":1870,"st":60,"s":"Casa & Cozinha","full":false,"free":true,"i":"🍲","imgs":[],"d":"Conjunto com 5 panelas antiaderentes, cabos térmicos e revestimento sem PFOA.","specs":{"Peças":"5","Revestimento":"Antiaderente"},"ativo":true},{"id":39,"n":"Utensílios de Cozinha Silicone 12 Peças","c":"Cozinha","p":59.9,"o":109.9,"r":4.6,"rv":2650,"st":140,"s":"Casa & Cozinha","full":false,"free":true,"i":"🥄","imgs":[],"d":"Kit com 12 utensílios de silicone resistentes ao calor, com suporte.","specs":{"Peças":"12","Material":"Silicone"},"ativo":true}]}</script>
 
 <script>
 const SUPABASE = {
@@ -329,6 +335,20 @@ const SB_ON = !!(SUPABASE.url && SUPABASE.anonKey);
 const FN = SUPABASE.url + '/functions/v1';
 const ORIGEM = location.hostname;
 const PIX_MAX = 5000;
+
+/* menu de coleções */
+const MENU = [
+  { k:'natal',   t:'Ofertas de Natal',      e:'🎅', tipo:'tag',  cls:'natal' },
+  { k:'ate50',   t:'Presentes até R$ 50',   e:'🎁', tipo:'max',  v:50,  cls:'gift' },
+  { k:'ate100',  t:'Presentes até R$ 100',  e:'💝', tipo:'max',  v:100, cls:'gift' },
+  { k:'eletro',  t:'Eletrônicos',           e:'📱', tipo:'cats', v:['Áudio','Celulares','Informática','Wearables','Games','Câmeras','Monitores'] },
+  { k:'casa',    t:'Casa e decoração',      e:'🏠', tipo:'cats', v:['Casa','Cozinha','Decoração'] },
+  { k:'beleza',  t:'Beleza e cuidados',     e:'💄', tipo:'cats', v:['Beleza'] },
+  { k:'brinq',   t:'Brinquedos',            e:'🧸', tipo:'cats', v:['Brinquedos'] },
+  { k:'moda',    t:'Moda e acessórios',     e:'👜', tipo:'cats', v:['Moda','Calçados'] },
+  { k:'top',     t:'Mais vendidos',         e:'🔥', tipo:'sort', cls:'hot' }
+];
+const menuAtual = () => MENU.find(m => m.k === state.menu) || null;
 
 let TG = { token:'', chat:'' };
 try{ TG = Object.assign(TG, JSON.parse(localStorage.getItem('nx_tg')||'{}')); }catch(e){}
@@ -373,7 +393,7 @@ const SEED = JSON.parse(document.getElementById('seedData').textContent).product
 
 const KEY='nx_state_v1', AKEY='nx_auth_v1';
 const state = {
-  view:'home', cat:null, q:'', sort:'rel', pid:null, tab:'d',
+  view:'home', menu:null, cat:null, q:'', sort:'rel', pid:null, tab:'d',
   cart:[], user:null, session:null, admin:false, orders:[], products:[], dbIds:new Set(),
   addr:null, order:null, step:1, pay:'card', pixAtivo:null, pixOcupado:false,
   filt:{min:'',max:'',full:false,free:false}, sideOpen:false, afterLogin:null, recovery:false,
@@ -662,7 +682,6 @@ async function testarTg(){
     out.textContent='Funcionou! Mensagem enviada para '+chat; out.style.color='var(--lime)';
   }catch(e){ out.textContent='Erro: '+e.message; out.style.color='var(--rose)'; }
 }
-
 async function descobrirChat(){
   const token=document.getElementById('tg_token').value.trim();
   const out=document.getElementById('tg_out');
@@ -672,7 +691,6 @@ async function descobrirChat(){
     const r=await fetch('https://api.telegram.org/bot'+token+'/getUpdates?limit=100&allowed_updates=%5B%22message%22%2C%22edited_message%22%2C%22my_chat_member%22%5D');
     const d=await r.json();
     if(!d.ok){ out.textContent='Token inválido: '+(d.description||''); out.style.color='var(--rose)'; return; }
-
     const map=new Map();
     (d.result||[]).forEach(u=>{
       const c = u.message?.chat || u.edited_message?.chat || u.my_chat_member?.chat;
@@ -681,19 +699,12 @@ async function descobrirChat(){
       const grupo = String(c.id).startsWith('-') || c.type==='group' || c.type==='supergroup';
       map.set(String(c.id), {nome, grupo});
     });
-
     const todos=[...map.entries()];
-    if(!todos.length){
-      out.innerHTML='Nada encontrado. Adicione o bot no grupo, mande uma mensagem lá e clique de novo.';
-      out.style.color='#fbbf24'; return;
-    }
-
+    if(!todos.length){ out.innerHTML='Nada encontrado. Adicione o bot no grupo, mande uma mensagem lá e clique de novo.'; out.style.color='#fbbf24'; return; }
     const grupos=todos.filter(([,v])=>v.grupo);
     const privados=todos.filter(([,v])=>!v.grupo);
     const btn = ([id,v]) => `<button class="btn xs ${v.grupo?'lime':'ghost'}" style="margin:6px 6px 0 0" onclick="document.getElementById('tg_chat').value='${id}';toast('Chat ${id} selecionado')">${v.grupo?'👥 ':'👤 '}${esc(v.nome)}</button>`;
-
-    out.innerHTML =
-      (grupos.length
+    out.innerHTML = (grupos.length
         ? '<b style="color:var(--lime)">Grupos encontrados — toque no certo:</b><br>'+grupos.map(btn).join('')
         : '<b style="color:#fbbf24">Nenhum grupo encontrado.</b><br><span class="hint">O bot está no grupo? Se estiver: @BotFather → /setprivacy → Disable, remova o bot do grupo, adicione de novo e mande uma mensagem.</span>')
       + (privados.length ? '<div style="margin-top:12px"><b>Conversa privada</b><br>'+privados.map(btn).join('')+'</div>' : '');
@@ -709,8 +720,9 @@ function go(v,opt){
   document.getElementById('sugg').classList.remove('on');
   render(); window.scrollTo({top:0,behavior:'smooth'});
 }
-function clearAll(){ state.cat=null; state.q=''; document.getElementById('q').value=''; state.filt={min:'',max:'',full:false,free:false}; go('home'); }
-function setCat(c){ state.cat=c; state.q=''; document.getElementById('q').value=''; go('home'); }
+function clearAll(){ state.menu=null; state.cat=null; state.q=''; document.getElementById('q').value=''; state.filt={min:'',max:'',full:false,free:false}; go('home'); }
+function setMenu(k){ state.menu=k; state.cat=null; state.q=''; document.getElementById('q').value=''; go('home'); }
+function setCat(c){ state.cat=c; state.menu=null; state.q=''; document.getElementById('q').value=''; go('home'); }
 const buscar = () => { document.getElementById('sugg').classList.remove('on'); go('home'); };
 function onSearch(v){
   state.q=v; const s=document.getElementById('sugg');
@@ -751,13 +763,20 @@ function renderAcc(){
   updateBadge();
 }
 function renderChips(){
-  document.getElementById('chipBar').innerHTML = `<button class="chip ${!state.cat?'on':''}" onclick="clearAll()">Tudo</button>` +
-    cats().map(c=>`<button class="chip ${state.cat===c?'on':''}" onclick="setCat('${esc(c)}')">${esc(c)}</button>`).join('');
+  document.getElementById('chipBar').innerHTML =
+    `<button class="chip ${!state.menu&&!state.cat?'on':''}" onclick="clearAll()">Tudo</button>` +
+    MENU.map(m=>`<button class="chip ${m.cls||''} ${state.menu===m.k?'on':''}" onclick="setMenu('${m.k}')"><span>${m.e}</span>${m.t}</button>`).join('');
 }
 
 /* LISTA */
 function filtered(){
   let l=state.products.filter(p=>p.ativo);
+  const m = menuAtual();
+  if(m){
+    if(m.tipo==='max') l=l.filter(p=>p.p<=m.v);
+    if(m.tipo==='cats') l=l.filter(p=>m.v.includes(p.c));
+    if(m.tipo==='tag') l=l.filter(p=>/natal/i.test(p.c));
+  }
   if(state.cat) l=l.filter(p=>p.c===state.cat);
   if(state.q) l=l.filter(p=>p.n.toLowerCase().includes(state.q.toLowerCase()));
   if(state.filt.full) l=l.filter(p=>p.full);
@@ -773,9 +792,10 @@ function filtered(){
 function cardHTML(p){
   const off = p.o>p.p? Math.round((1-p.p/p.o)*100):0;
   const im = firstImg(p);
+  const presente = p.p<=100;
   return `<article class="pcard" onclick="openProd(${p.id})">
     <div class="pmedia ${im?'':'noimg'}" data-emoji="${esc(p.i||'📦')}">
-      <div class="tags">${p.full?'<span class="tag">Envio full</span>':''}${off>=10?`<span class="tag hot">-${off}%</span>`:''}</div>
+      <div class="tags">${p.full?'<span class="tag">Envio full</span>':''}${off>=10?`<span class="tag hot">-${off}%</span>`:''}${presente?'<span class="tag gift">Presente</span>':''}</div>
       ${im?`<img src="${esc(im)}" alt="${esc(p.n)}" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">`:''}
       <button class="quick" onclick="addCart(${p.id},1,event)" aria-label="Adicionar">+</button>
     </div>
@@ -797,20 +817,21 @@ const TRUST = `<div class="trust">
 
 function viewHome(){
   const l=filtered();
-  const hero = state.products.filter(p=>p.ativo&&firstImg(p)).slice(0,3);
+  const m=menuAtual();
+  const hero = state.products.filter(p=>p.ativo).slice(0,3);
   return `
-  <div class="bc"><a onclick="clearAll()">Início</a><span>›</span><span>${esc(state.cat||(state.q?'Busca':'Vitrine'))}</span></div>
-  ${!state.cat&&!state.q?`
+  <div class="bc"><a onclick="clearAll()">Início</a><span>›</span><span>${esc(m? m.t : state.cat || (state.q?'Busca':'Vitrine'))}</span></div>
+  ${!state.menu&&!state.cat&&!state.q?`
   <section class="hero">
     <div>
-      <span class="kick"><i></i>Curadoria da semana</span>
-      <h1>Tecnologia que<br><span class="grad">eleva o seu dia</span></h1>
-      <p>Só o que vale a pena: áudio, mobilidade, casa e setup. Preço justo, frete grátis e devolução em 30 dias.</p>
-      <div class="cta"><button class="btn wauto" onclick="setCat('Áudio')">Explorar ofertas</button>
-      <button class="btn ghost wauto" onclick="document.getElementById('q').focus()">Buscar produto</button></div>
+      <span class="kick"><i></i>Presentes e ofertas</span>
+      <h1>Achou o presente<br><span class="grad">certo pra hoje</span></h1>
+      <p>Beleza, brinquedos, casa e decoração de Natal. Preço justo, frete grátis e devolução em 30 dias.</p>
+      <div class="cta"><button class="btn wauto" onclick="setMenu('ate100')">Ver presentes até R$ 100</button>
+      <button class="btn ghost wauto" onclick="setMenu('natal')">🎄 Ofertas de Natal</button></div>
       ${TRUST}
     </div>
-    <div class="hcards">${hero.map(p=>`<div class="hcard" onclick="openProd(${p.id})"><img src="${esc(firstImg(p))}" alt="${esc(p.n)}"></div>`).join('')}</div>
+    <div class="hcards">${hero.map(p=>{const im=firstImg(p); return `<div class="hcard" onclick="openProd(${p.id})">${im?`<img src="${esc(im)}" alt="${esc(p.n)}">`:esc(p.i||'🎁')}</div>`;}).join('')}</div>
   </section>`:''}
   <button class="ftoggle" onclick="toggleFiltros()"><span>Filtros e ordenação</span><span>${state.sideOpen?'▲':'▼'}</span></button>
   <div class="layout">
@@ -825,7 +846,7 @@ function viewHome(){
         ${cats().map(c=>`<label><input type="radio" name="fcat" ${state.cat===c?'checked':''} onchange="setCat('${esc(c)}')"> ${esc(c)}</label>`).join('')}</div></div>
     </aside>
     <section>
-      <div class="shead"><div><h2>${state.cat? esc(state.cat):state.q?'Resultados':'Em destaque'}</h2><p>${l.length} produto${l.length===1?'':'s'} para você</p></div>
+      <div class="shead"><div><h2>${m? m.e+' '+esc(m.t) : state.cat? esc(state.cat):state.q?'Resultados':'Em destaque'}</h2><p>${l.length} produto${l.length===1?'':'s'} ${m&&m.tipo==='max'?'por até '+brl(m.v):'para você'}</p></div>
         <label class="tsel">Ordenar
           <select onchange="state.sort=this.value;render()">
             <option value="rel" ${state.sort==='rel'?'selected':''}>Relevância</option>
@@ -835,7 +856,7 @@ function viewHome(){
           </select></label>
       </div>
       ${l.length? `<div class="grid">${l.map(cardHTML).join('')}</div>`
-        : `<div class="card empty"><span class="ic">🔍</span><b>Nada encontrado</b><p>Tente outro termo.</p><button class="btn sm" onclick="clearAll()">Limpar tudo</button></div>`}
+        : `<div class="card empty"><span class="ic">🔍</span><b>Nada encontrado</b><p>Tente outro termo ou outra categoria.</p><button class="btn sm" onclick="clearAll()">Limpar tudo</button></div>`}
     </section>
   </div>`;
 }
@@ -1313,7 +1334,7 @@ function viewAdmin(){
       <button class="btn xs ${x.ativo?'red':'lime'}" onclick="alternarAtivo(${x.id})">${x.ativo?'Ocultar':'Publicar'}</button></div></div>`).join(''):'<div class="hint">Nenhum produto.</div>'}
   </div>`;
 }
-async function publicarCatalogo(){ if(!confirm('Publicar os 18 exemplos?')) return; await seedSupabase(); }
+async function publicarCatalogo(){ if(!confirm('Publicar os produtos de exemplo?')) return; await seedSupabase(); }
 
 /* RENDER */
 const VIEWS = { home:viewHome, prod:viewProd, cart:viewCart, checkout:viewCheckout, ok:viewOk, compras:viewCompras, entrar:viewEntrar, cadastrar:viewCadastrar, recuperar:viewRecuperar, novaSenha:viewNovaSenha, cep:viewCep, admin:viewAdmin };
@@ -1322,7 +1343,9 @@ function render(){
   renderAcc(); renderChips();
   document.getElementById('view').innerHTML = (VIEWS[state.view]||viewHome)();
   if(state.view==='checkout'&&state.pixAtivo) iniciarMonitor();
-  document.title = state.view==='prod'&&byId(state.pid) ? byId(state.pid).n+' — Nexor Tech' : 'Nexor Tech — Tecnologia premium';
+  const m = menuAtual();
+  document.title = state.view==='prod'&&byId(state.pid) ? byId(state.pid).n+' — Nexor Tech'
+    : m ? m.t+' — Nexor Tech' : 'Nexor Tech — Presentes e ofertas';
 }
 document.addEventListener('click', e=>{ if(!e.target.closest('.searchpill')) document.getElementById('sugg').classList.remove('on'); });
 (async function boot(){
